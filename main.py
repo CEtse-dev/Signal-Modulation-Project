@@ -97,6 +97,5 @@ qpsk_bits = np.empty(len(bits), dtype=int)
 qpsk_bits[0::2] = (I_values > 0)
 qpsk_bits[1::2] = (Q_values > 0)
 
-
 print("Matches input bits:           ", np.array_equal(qpsk_bits, bits))
 
