@@ -1,0 +1,13 @@
+Sampling Rate - # of times per second a contiunous signal is measured(snapshots/second)
+
+Bit Rate - Total number of binary digits processed/transmitted per second
+
+Bit Depth(bits per sample) - 3 bits for sample; 1 sample = 3 bits of data space
+    - With each snapshot, a 3 digit binary number is saved
+
+Samples Per Bit - 1/3 means A bit only holds 1/3 of information to describe one full snapshot
+    - Or 240 means you take 240 snapshots for each bit transmitted
+
+
+
+    

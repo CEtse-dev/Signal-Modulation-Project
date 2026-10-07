@@ -1,0 +1,72 @@
+----------
+Learn about Fast Fourier Transform
+----------
+python -m venv .venv
+
+.venv\Scripts\Activate.ps1
+
+
+"""
+fs = 48000       # sample rate
+fc = 2000        # carrier frequency (Hz)
+bit_rate = 200   # bits per second
+bits = np.array([1, 0, 1, 1, 0])  # our "message"
+
+samples_per_bit = int(fs / bit_rate)
+
+# Step 1: map bits to symbols (+1 / -1)
+symbols = 2*bits - 1   # 1 -> +1, 0 -> -1
+print(symbols)  # [ 1 -1  1  1 -1]
+
+# Step 2: stretch each symbol across its bit duration
+symbol_stream = np.repeat(symbols, samples_per_bit)
+
+# Step 3: build a time array for the whole transmission
+t = np.arange(len(symbol_stream)) / fs
+
+# Step 4: generate the carrier
+carrier = np.sin(2*np.pi*fc*t)
+
+# Step 5: multiply symbol stream onto carrier -> BPSK signal
+bpsk_signal = symbol_stream * carrier
+
+#
+"""
+
+Demodulation: Carrier recovery (or just assume known carrier for a first pass 
+— Costas loop is the "harder mode" upgrade), matched filtering / correlation 
+with reference waveforms, symbol decision, bit reconstruction.
+
+Verification: Compare recovered bits to original, compute BER, plot waveforms 
+at each stage (original, modulated, noisy, demodulated) with matplotlib.
+
+
+plug in mp3 file data
+
+add visual representations of the frequencies
+
+add something that is an input from user
+
+
+MAKING THIS MORE COMPLICATED - BIT-TRUE SIMULATION
+[ Data Source ] ➔ [ Tx DSP ] ➔ [ Channel Effects ] ➔ [ Rx DSP ] ➔ [ BER Analysis ]
+
+1. Transmitter DSP(Math Signal)
+    - Generate IQ Modulation on top of sinewave
+    - Apply pulse shaping filters like a Root-Raised Cosine (RRC) filter to limit the signal bandwidth, just like a real transmitter.
+
+2. Channel Effects (The "Real World" Math)
+    - AWGN(Additive White Gaussian Noise): Simulate thermal noise at varying SNR levels
+    - Carrier Frequency Offset(CFO) & Phase Noise: Add a slight frequency drift to simulate imperfect crystal oscillators in real transmitter & receiver
+    - Multpath Fading: Simulate signal bouncing off buildings by adding delayed, attenuated copies of signal (Rayleigh/Rician fading)
+
+3. Receiver DSP
+    - Matched Filtering: RRC filter to maximize SNR
+    - Time Synchronization: Algorithms (Gardner/Mueller-Mller) to find exactly where a symbol begins
+    - Carrier Phase/Frequency Tracking: Costas Loop or Phase-Locked Loop to lock onto the "fake" frequency drift you added
+    - Equalization: A Least Mean Squares (LMS) or Constant Modulus Algorithm(CMA) filter to clean up the multpath reflections
+
+
+------
+
+Turn an altoid can into a dj controller; filtering of audio signals, etc.
