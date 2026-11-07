@@ -10,4 +10,15 @@ Samples Per Bit - 1/3 means A bit only holds 1/3 of information to describe one 
 
 
 
-    
+QPSK addition formula & it's mathematical equivalent
+
+
+
+Verification process essentially does the full process but backwards
+
+tx = transmit
+rx = receive
+
+Additive White Gaussian Noise
+
+Transmitter --> Channel --> Receiver
